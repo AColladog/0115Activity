@@ -19,6 +19,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    private Command comandoAnterior;
 
     /**
      * Create the game and initialise its internal map.
@@ -27,6 +28,8 @@ public class Game
     {
         createRooms();
         parser = new Parser();
+        comandoAnterior = null;
+        
     }
 
     /**
@@ -159,10 +162,40 @@ public class Game
         else if (commandWord.equals("quit")) {
             wantToQuit = quit(command);
         }
-
+        else if (commandWord.equals("back")) {
+            goBack();
+        }
         return wantToQuit;
     }
-
+    
+    /**
+     * Nos ayuda a retroceder una posición
+     */
+    private void goBack(){
+        String nextDirection = "";
+        if(comandoAnterior == null){
+            System.out.println("No ha habido desplazamiento previo");
+        }else{
+            if(comandoAnterior.getSecondWord().equals("north")){
+                nextDirection = "south";
+            }else if(comandoAnterior.getSecondWord().equals("south")){
+                nextDirection = "north";
+            }else if(comandoAnterior.getSecondWord().equals("east")){
+                nextDirection = "west";
+            }else if(comandoAnterior.getSecondWord().equals("west")){
+                nextDirection = "east";
+            }else if(comandoAnterior.getSecondWord().equals("northwest")){
+                nextDirection = "souteast";
+            }else if(comandoAnterior.getSecondWord().equals("southwest")){
+                nextDirection = "northeast";
+            }else if(comandoAnterior.getSecondWord().equals("northeast")){
+                nextDirection = "southwest";
+            }else if(comandoAnterior.getSecondWord().equals("southeast")){
+                nextDirection = "northwest";
+            }         
+            goRoom(new Command("go", nextDirection));
+        }
+    }
     // implementations of user commands:
 
     /**
@@ -196,6 +229,7 @@ public class Game
         }
         else {
             currentRoom = nextRoom;
+            comandoAnterior = command;
             printLocationInfo();
         }
          

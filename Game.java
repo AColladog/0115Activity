@@ -19,7 +19,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
-    private Command comandoAnterior;
+    private Room habitacionAnterior;
 
     /**
      * Create the game and initialise its internal map.
@@ -28,7 +28,7 @@ public class Game
     {
         createRooms();
         parser = new Parser();
-        comandoAnterior = null;
+        habitacionAnterior = null;
         
     }
 
@@ -173,27 +173,11 @@ public class Game
      */
     private void goBack(){
         String nextDirection = "";
-        if(comandoAnterior == null){
+        if(habitacionAnterior == null){
             System.out.println("No ha habido desplazamiento previo");
         }else{
-            if(comandoAnterior.getSecondWord().equals("north")){
-                nextDirection = "south";
-            }else if(comandoAnterior.getSecondWord().equals("south")){
-                nextDirection = "north";
-            }else if(comandoAnterior.getSecondWord().equals("east")){
-                nextDirection = "west";
-            }else if(comandoAnterior.getSecondWord().equals("west")){
-                nextDirection = "east";
-            }else if(comandoAnterior.getSecondWord().equals("northwest")){
-                nextDirection = "souteast";
-            }else if(comandoAnterior.getSecondWord().equals("southwest")){
-                nextDirection = "northeast";
-            }else if(comandoAnterior.getSecondWord().equals("northeast")){
-                nextDirection = "southwest";
-            }else if(comandoAnterior.getSecondWord().equals("southeast")){
-                nextDirection = "northwest";
-            }         
-            goRoom(new Command("go", nextDirection));
+            currentRoom = habitacionAnterior;
+            printLocationInfo();
         }
     }
     // implementations of user commands:
@@ -228,8 +212,8 @@ public class Game
             System.out.println("There is no door!");
         }
         else {
-            currentRoom = nextRoom;
-            comandoAnterior = command;
+            habitacionAnterior = currentRoom;
+            currentRoom = nextRoom;            
             printLocationInfo();
         }
          
